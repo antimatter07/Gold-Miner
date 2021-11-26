@@ -116,7 +116,7 @@ public class Miner {
     return UnitType.EMPTY;
   }
 
-  // NEW
+  
   public int getFront() {
     return currentFront;
   }
