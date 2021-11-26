@@ -143,6 +143,25 @@ public class Miner {
     System.out.println("Miner is now at coordinate [" + row + "] [" + col + "]");
 
   }
+
+
+  public boolean canMoveForward(Board b) {
+    switch(Fronts.get(currentFront)){
+      case NORTH:  
+        if(row - 1 >= 0) return true;
+      break;
+      case EAST:
+        if(col + 1 < b.getSize()) return true;
+      break;
+      case SOUTH:
+        if(row + 1 < b.getSize()) return true;
+      break;
+      case WEST:
+        if(col - 1 >= 0) return true;
+      break;
+    }
+    return false;
+  }
   
   //rotate miner clockwise
   public void rotate() {

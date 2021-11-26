@@ -45,14 +45,6 @@ public class TryBFS {
         board.displayBoard();
 
 
-       
-        
-    
-
-    
-
-
-
     scan.close();
 
   }
@@ -87,7 +79,7 @@ public class TryBFS {
             return node;
 
         successors = expand(node, board);
-        visited.add(node);
+        
         
         //for every successor generated that has not been visited, add to list of unexplored
         //nodes
@@ -95,12 +87,18 @@ public class TryBFS {
 
             successors.get(i).getMiner().getCol();
 
-            if(!isVisited(visited, node) == false)
+            //if(isVisited(visited, node) == false)
+            if(board.getMiningArea()[successors.get(i).getMiner().getRow()]
+               [successors.get(i).getMiner().getCol()].isVisited == false 
+               && successors.get(i).getMiner() != null)
                 fringe.enqueue(successors.get(i));
+
+                
 
             
         }
-
+        board.getMiningArea()[node.getMiner().getRow()][node.getMiner().getCol()].setVisited();
+        visited.add(node);
         successors.clear();
         
 
@@ -112,73 +110,55 @@ public class TryBFS {
   }
 
   public static ArrayList<Node> expand(Node node, Board board) {
-    ArrayList<Node> successors = new ArrayList<Node>();
-    Node newNode = new Node();
-    Node newNode2 = new Node();
+    ArrayList<Node> successors = new ArrayList<Node>(4);
+  
+    System.out.println("ARRAYLIST SIZE: " + successors.size());
 
-    //hindi pwede yung assignmenet statement since it will aloways point
-    //to original node :<
-    duplicateNode(node, newNode2);
-    duplicateNode(node, newNode);
-
-
+   
     
-    //newNode.getSquare().getMiner().move(board.getMiningArea());
-    //System.out.println("COL!!" + newNode.getMiner().getCol());
-    //System.out.println("INIT CONTENTS OF NEWNODE AND 2: " + newNode.getMiner().getRow() + 
-    //newNode.getMiner().getCol() + " " + newNode2.getMiner().getRow() + newNode2.getMiner().getCol());
-    //System.out.println("INIT ACTIONS OF NEWNODE AND 2: " + newNode.getActions() + "\n" + newNode2.getActions());
 
     //for every valid action, generate new states as a result of doing that action
-    for(int i = 0; i < 2; i++) {
-        
+    for(int i = 0; i < 4; i++) {
+
        
-        //System.out.println("ACTIONS OF NEWNODE: " + newNode.getActions());
-        //newNode.getSquare().getMiner().move(board.getMiningArea());
+        successors.add(i, new Node());
+        
+        duplicateNode(node, successors.get(i));
 
-        //if miner does not scan pit in front, move forward
-        if(i == 0  && 
-        (newNode.getMiner().scan(board) == UnitType.GOLD || 
-        newNode.getMiner().scan(board) == UnitType.BEACON || 
-        newNode.getMiner().scan(board) == UnitType.EMPTY)) {
-            
-            
-            
-            
-            newNode.setParent(node);
-
-            //add M to track actions done to get to goal node
-            newNode.addAction("M");
-            
-            newNode.getMiner().move(board);
-           
-            newNode.setSquare(board.getMiningArea()[newNode.getMiner().getRow()][newNode.getMiner().getCol()]);
-            
-            
-            
-
-            System.out.println(newNode.getMiner().getRow());
-            successors.add(newNode);
-            
-            
-
-        } else if(i == 1) {
-            //System.out.println("ACTIONS OF NEWNODE2: " + newNode2.getActions());
+        //rotate 0, 1, 2, then 3 times
+        for(int j = 0; j < i; j++) {
 
             //add R to track actions done to get to goal node
-            newNode2.addAction("R");
-            newNode2.setParent(node);
-            newNode2.getMiner().rotate();
-            
-            successors.add(newNode2);
 
+            successors.get(i).addAction("R");
+            successors.get(i).setParent(node);
+            successors.get(i).getMiner().rotate();
+            
+           
+
+        }
+        //if miner can move and not pit, move forward
+        if(successors.get(i).getMiner().canMoveForward(board) && 
+        (successors.get(i).getMiner().scan(board) == UnitType.GOLD|| 
+        successors.get(i).getMiner().scan(board) == UnitType.BEACON || 
+        successors.get(i).getMiner().scan(board) == UnitType.EMPTY)) {
+
+            successors.get(i).setParent(node);
+
+            //add M to track actions done to get to goal node
+            successors.get(i).addAction("M");
+            
+            successors.get(i).getMiner().move(board);
+            
+            successors.get(i).setSquare(board.getMiningArea()[successors.get(i).getMiner().getRow()][successors.get(i).getMiner().getCol()]);
+            
         }
 
             
         
     }
 
-
+    
     return successors;
 }
 
