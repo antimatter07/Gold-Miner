@@ -8,10 +8,8 @@ public class GUI extends JFrame{
     public GUI() {
         super("Gold Miner");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        //setSize(new Dimension(WIDTH, HEIGHT));
         makeStartPanel();
         add(startPanel);
-       // setLocationRelativeTo(null); // opens at the center of screen
         pack();
         setResizable(false);
         setVisible(true);

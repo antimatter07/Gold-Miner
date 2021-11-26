@@ -16,7 +16,6 @@ public class Board{
         pitCount = computePit();
         beaconCount = computeBeacon();
         generateBoard();
-        displayBoard();
     }
 
     // initializes the position of beacons, pits, and gold on the board
@@ -164,7 +163,7 @@ public class Board{
     public void moveMiner () {
         miner.move(this);
     }
-    
+
     public int getMinerRow () {
         return miner.getRow() + 1;
     }
@@ -173,36 +172,29 @@ public class Board{
         return miner.getCol() + 1;
     }
 
-    public char getMinerSymbol () {
-        return miner.getSymbol();
+    public Miner getMiner () {
+        return miner;
     }
 
 
-    //for testing
     public void displayBoard(){
 
         for(int i =0; i < N; i++){
-           
+
             for(int j =0; j < N; j++){
-                System.out.print("----");
+                System.out.print("--");
             }
-            System.out.println("-");
-            
+            System.out.println();
             for(int j =0; j < N; j++){
-                if(miner.getRow() == i && miner.getCol() ==j){
-                  System.out.print("| M ");  
-                }else if(boardArray[i][j] != null){
-                  System.out.print("| " + boardArray[i][j].getSymbol() + " ");
-                }else if(boardArray[i][j] == null){
-                  System.out.print("|   ");   
+                if(boardArray[i][j] == null){
+                    System.out.print("| ");
+                }else{
+                    System.out.print("|" + boardArray[i][j].getSymbol());
                 }
 
             }
-            System.out.println("|");
+            System.out.println();
         }
-        for(int i =0; i < N; i++){       
-            System.out.print("----");
-        }
-        System.out.print("-");
     }
+
 }

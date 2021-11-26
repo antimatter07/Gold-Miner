@@ -114,9 +114,6 @@ public class TryBFS {
   
     System.out.println("ARRAYLIST SIZE: " + successors.size());
 
-   
-    
-
     //for every valid action, generate new states as a result of doing that action
     for(int i = 0; i < 4; i++) {
 
@@ -125,7 +122,7 @@ public class TryBFS {
         
         duplicateNode(node, successors.get(i));
 
-        //rotate 0, 1, 2, then 3 times
+        //rotate 0, 1, 2, then 3 times for all possible resulting states when moving
         for(int j = 0; j < i; j++) {
 
             //add R to track actions done to get to goal node
@@ -137,7 +134,7 @@ public class TryBFS {
            
 
         }
-        //if miner can move and not pit, move forward
+        //if miner can move and scanned is not pit, move forward
         if(successors.get(i).getMiner().canMoveForward(board) && 
         (successors.get(i).getMiner().scan(board) == UnitType.GOLD|| 
         successors.get(i).getMiner().scan(board) == UnitType.BEACON || 
