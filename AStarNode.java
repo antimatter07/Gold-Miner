@@ -1,4 +1,6 @@
 import java.util.*;
+
+
 public class AStarNode implements Comparable<AStarNode> {
 
     //Unit miner is
