@@ -170,22 +170,5 @@ public static void duplicateNode(Node origNode, Node dupNode) {
 
 }
 
-public static boolean isVisited(ArrayList<Node> visited, Node currentNode) {
-
-    boolean isVisited = false;
-
-    for(int i = 0; i < visited.size() && isVisited == false; i++) {
-
-        if(currentNode.getMiner().getFront() == visited.get(i).getMiner().getFront()) {
-
-            if(currentNode.getMiner().getRow() == visited.get(i).getMiner().getRow() 
-            && currentNode.getMiner().getCol() == visited.get(i).getMiner().getCol()) 
-                isVisited = true;
-        }
-    }
-
-    return isVisited;
-}
-
   
 }
