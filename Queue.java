@@ -1,3 +1,5 @@
+//java has a queue library(?), are we required to create our own code for queues?
+
 public class Queue {
     //NEW CLASS
 
