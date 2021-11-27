@@ -121,7 +121,10 @@ public class Miner {
     return currentFront;
   }
 
- 
+ // return DirectionType enumfor currentFront
+ public DirectionType getDirectionFront() {
+    return Fronts.get(currentFront);
+  }
   
   public void move(Board b) {
   
