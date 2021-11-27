@@ -77,6 +77,7 @@ public class Controller implements ActionListener {
         
         solutionCount++;
         if (solutionCount == solutionLength) {
+            boardPanel.updateCosts('G'); //Goal is Found
             timer.stop();
         }
     }

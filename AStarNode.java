@@ -77,14 +77,14 @@ public class AStarNode implements Comparable<AStarNode> {
   }
 
   public void setSquare(Unit s) {
-      if(s instanceof Pit) 
-          state = new Pit(s.getCoordinates(), 'P', UnitType.PIT);
-      else if (s instanceof Gold) 
-          state = new Gold(s.getCoordinates(), 'G', UnitType.GOLD);
-      else if (s instanceof Beacon)
-          state = new Beacon(s.getCoordinates(), 'B', UnitType.BEACON);
-      else     
-          state = new EmptySquare(s.getCoordinates(), ' ', UnitType.EMPTY);
+
+        switch(s.getUnitType()){
+          case PIT: state = new Pit(s.getCoordinates(), 'P', UnitType.PIT); break;
+          case GOLD:  state = new Gold(s.getCoordinates(), 'G', UnitType.GOLD); break;
+          case BEACON: state = new Beacon(s.getCoordinates(), 'B', UnitType.BEACON);break;
+          default: state = new EmptySquare(s.getCoordinates(), ' ', UnitType.EMPTY);
+        }
+        
   }
 
   public void setParent(AStarNode parent) {
@@ -101,9 +101,11 @@ public class AStarNode implements Comparable<AStarNode> {
 
 
   public boolean isGoal() {
-      if(state instanceof Gold) {
-          return true;
-      }
-      return false;
+       
+    if(state.getUnitType() == UnitType.GOLD)
+      return true;
+    return false;
+        
+      
   }
 }

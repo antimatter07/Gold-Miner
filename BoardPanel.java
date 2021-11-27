@@ -117,7 +117,9 @@ public class BoardPanel extends JPanel {
             currentMove = "ROTATES";
             rotateCount++;
         }
-        pathCost++;
+        else if (move == 'G')
+            currentMove = "FOUND GOAL";
+        pathCost = moveCount + rotateCount;
     }
 
     private void updateInfoPanel () {

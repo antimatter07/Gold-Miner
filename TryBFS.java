@@ -200,37 +200,10 @@ import java.awt.event.ActionEvent;
 import java.util.*;
 
 
-//random level of rationality
-public class TryBFS {
-//    public static void main(String[] args) {
-//
-//        Scanner scan = new Scanner(System.in);
-//        int input;
-//
-//        do{
-//            System.out.print("Input Board Size: ");
-//            input = scan.nextInt();
-//
-//            if(input < 8 || input > 64){
-//                System.out.println("Input Invalid");
-//            }
-//
-//        }while(input < 8 || input > 64);
-//
-//        Board board = new Board(input);
-//        Node solution;
-//        solution = BFS(board);
-//
-//        System.out.println("R: ROTATE, M: MOVE FORWARD. MINER INITIALLY FACING NORTH.");
-//        System.out.println("ACTIONS TO GET TO THE GOLD: " + solution.getActions());
-//        board.displayBoard();
-//
-//
-//        scan.close();
-//
-//    }
-
 // EDITED TO WORK WITH GUI
+//random level of rationality 
+public class TryBFS {
+
     private static Board board;
     private static int pathCost = 0;
 

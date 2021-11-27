@@ -46,7 +46,6 @@ public class Miner {
   public int getRow() {return this.row;}
   public int getCol() {return this.col;}
   public UnitType scan(Board b) {
-     //test loop conditions
 
     switch(Fronts.get(currentFront)){
       case NORTH:

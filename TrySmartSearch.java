@@ -42,7 +42,7 @@ public class TrySmartSearch {
 
     //fringe is the frontier of unexplored nodes
     //insteadd of LIFO, it is ordered by ascending f(n) cost
-    PriorityQueue<AStarNode> fringe = new PriorityQueue<AStarNode>(100000);
+    PriorityQueue<AStarNode> fringe = new PriorityQueue<AStarNode>(10000000);
     AStarNode root;
     AStarNode node;
   
