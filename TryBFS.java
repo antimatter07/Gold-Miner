@@ -70,7 +70,7 @@ public class TryBFS {
 
         //take latest unexplored node and expand
         node = fringe.dequeue();
-        visited.add(node);
+        
         
       
         System.out.println("Have we reached goal:  " + node.isGoal());
@@ -87,7 +87,7 @@ public class TryBFS {
 
             successors.get(i).getMiner().getCol();
 
-            //if(isVisited(visited, node) == false)
+            //if not visited and state exists, enqueue to open list
             if(board.getMiningArea()[successors.get(i).getMiner().getRow()]
                [successors.get(i).getMiner().getCol()].isVisited == false 
                && successors.get(i).getMiner() != null)
@@ -97,8 +97,10 @@ public class TryBFS {
 
             
         }
+
+        //set as visited so that miner will not redundantly expand nodes already explored
         board.getMiningArea()[node.getMiner().getRow()][node.getMiner().getCol()].setVisited();
-        visited.add(node);
+        
         successors.clear();
         
 
