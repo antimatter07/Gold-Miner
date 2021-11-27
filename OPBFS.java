@@ -26,7 +26,7 @@ import java.util.*;
 
 
 //random level of rationality
-// hmm ill try to make it so miner moves per node traversal..
+// hmm ill try to make it so miner moves per node traversal, since there's scan count..
 public class OPBFS {
 
     //list of successor nodes after expanding
