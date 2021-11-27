@@ -51,7 +51,7 @@ public class TryBFS {
   //returns solution Node with path to the Gold
   public static Node BFS(Board board) {
 
-    ArrayList<Node> visited = new ArrayList<Node>();
+  
     //list of successor nodes after expanding
     ArrayList<Node> successors = new ArrayList<Node>();
     //fringe is the frontier of unexplored nodes
