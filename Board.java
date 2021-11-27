@@ -18,6 +18,11 @@ public class Board{
         generateBoard();
     }
 
+    //needed for A*
+    public int[] getGoldCoord() {
+        return goldCoord;
+    }
+
     // initializes the position of beacons, pits, and gold on the board
     private void generateBoard() {
         boolean goldPlaced = false;

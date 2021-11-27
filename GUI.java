@@ -93,7 +93,7 @@ public class GUI extends JFrame{
         return inputText.getText();
     }
 
-    public JPanel getBoardPanel () {
+    public BoardPanel getBoardPanel () {
         return boardPanel;
     }
 
@@ -106,9 +106,10 @@ public class GUI extends JFrame{
 
     private Color bgColor = new Color(208, 202, 181);
 
-    private JPanel boardPanel;
+    private BoardPanel boardPanel;
     private JPanel startPanel;
     private JTextField inputText;
     private JButton enterButton;
     private JLabel errorLabel;
+
 }

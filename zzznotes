@@ -1,3 +1,11 @@
 AHHH GUI is almost working na (Miner moving per 1.5 secs i think?)
 
+continue lang sa GUI medyo may idea na ako for heuristic hehe
+also for BFS, i think its ok if we just show the final solution where the miner found the gold
+ang hirap if we show all the possible solutions it considers 
+
 Just need to implement how it will show the BFS
+T-T
+
+
+okiii. gl

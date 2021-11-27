@@ -16,10 +16,11 @@ public class BoardPanel extends JPanel {
         miner = board.getMiner();
         N = board.getSize();
         squareSize = HEIGHT/N;
-        minerIcons = new ImageIcon[4]; // N E S W
+        minerIcons = new Image[4]; // N E S W
         boardLabelArray = new JLabel[N][N];
-        drawBoard();
+        currentMove = "STARTS";
         makeMinerIcons();
+        drawBoard();
         makeInfoPanel();
     }
 
@@ -62,7 +63,8 @@ public class BoardPanel extends JPanel {
                 boardGrid.add(boardLabelArray[i][j]);
             }
         }
-     //   displayMiner();
+        currentLabel = boardLabelArray[0][0];
+        displayMiner();
         this.add(boardGrid);
     }
 
@@ -96,6 +98,7 @@ public class BoardPanel extends JPanel {
         labels.add(rotateCountLabel);
         labels.add(pathCostLabel);
         infoPanel.add(labels, BorderLayout.NORTH);
+
         // add history of moves
         this.add(infoPanel);
     }
@@ -105,13 +108,25 @@ public class BoardPanel extends JPanel {
         msg.setBorder(javax.swing.BorderFactory.createEmptyBorder());
     }
 
+    public void updateCosts (char move) {
+        if (move == 'M') {
+            currentMove = "MOVES";
+            moveCount++;
+        }
+        else if (move == 'R') {
+            currentMove = "ROTATES";
+            rotateCount++;
+        }
+        pathCost++;
+    }
+
     private void updateInfoPanel () {
-        minerPosLabel.setText("Miner is at [" + board.getMinerRow() + "," + board.getMinerCol() + "]");
-        minerDirectionLabel.setText("Miner is facing " /* miner.getFront()*/);
-        moveLabel.setText("Miner " /* + board.getMinerMove() */);
-        moveCountLabel.setText("Move Count: "/* + board.getMoveCount */);
-        rotateCountLabel.setText("Rotate Count: " /* board.getRotateCount */);
-        pathCostLabel.setText("Path Cost: " /* board.getPathCost */);
+        minerPosLabel.setText(" Miner is at [" + board.getMinerRow() + "," + board.getMinerCol() + "]");
+        minerDirectionLabel.setText(" Miner is facing " + miner.getDirectionFront().toString());
+        moveLabel.setText(" Miner " + currentMove);
+        moveCountLabel.setText(" Move Count: " + moveCount);
+        rotateCountLabel.setText(" Rotate Count: " + rotateCount);
+        pathCostLabel.setText(" Path Cost: " + pathCost);
     }
 
     // resizes miner icons to fit into the squares
@@ -120,32 +135,32 @@ public class BoardPanel extends JPanel {
         changeSize("images/miner_east.png", 1, squareSize, squareSize);
         changeSize("images/miner_south.png", 2, squareSize, squareSize);
         changeSize("images/miner_west.png", 3, squareSize, squareSize);
-        displayMiner();
     }
 
     private void changeSize(String imgName, int dir, int w, int h){
         Image img = loadImage(imgName);
-        img = img.getScaledInstance (w, h, Image.SCALE_DEFAULT);
-        System.out.println("W: " + img.getWidth(null) + "|H: " + img.getHeight(null));
-        minerIcons[dir] = new ImageIcon(img);
+        if (img != null)
+         img = img.getScaledInstance (w, h, Image.SCALE_DEFAULT);
+        minerIcons[dir] = img;
     }
 
-    public void displayMiner () {
+    private void displayMiner () {
         int row = miner.getRow();
         int col = miner.getCol();
-        int currentFront = miner.getFront();
+        DirectionType currentFront = miner.getDirectionFront();
+        currentLabel = boardLabelArray[row][col];
         switch (currentFront) {
-            case 3: //EAST
-                boardLabelArray[row][col].setIcon(minerIcons[1]);
+            case EAST:
+                currentImage = minerIcons[1];
                 break;
-            case 6: //SOUTH
-                boardLabelArray[row][col].setIcon(minerIcons[2]);
+            case SOUTH:
+                currentImage = minerIcons[2];
                 break;
-            case 9: //WEST
-                boardLabelArray[row][col].setIcon(minerIcons[3]);
+            case WEST:
+                currentImage = minerIcons[3];
                 break;
-            case 12: //NORTH
-                boardLabelArray[row][col].setIcon(minerIcons[0]);
+            case NORTH:
+                currentImage = minerIcons[0];
                 break;
         }
     }
@@ -159,6 +174,14 @@ public class BoardPanel extends JPanel {
         }
     }
 
+    @Override
+    public void paint (Graphics g) {
+        super.paint(g);
+        displayMiner();
+        updateInfoPanel();
+        g.drawImage(currentImage, currentLabel.getX(), currentLabel.getY(), null);
+    }
+
     private Board board;
     private Miner miner;
     private final int N;
@@ -166,7 +189,11 @@ public class BoardPanel extends JPanel {
 
     private final int WIDTH;
     private final int HEIGHT;
-    
+
+    private int moveCount = 0;
+    private int rotateCount = 0;
+    private int pathCost = 0;
+    private String currentMove;
 
     private Color lightBrown = new Color (150, 97, 61);
     private Color darkBrown = new Color (131, 80, 46);
@@ -177,7 +204,10 @@ public class BoardPanel extends JPanel {
     private JPanel boardGrid;
     private JPanel infoPanel;
 
-    private ImageIcon[] minerIcons;
+    private JLabel currentLabel;
+    private Image currentImage;
+
+    private Image[] minerIcons;
     private JLabel[][] boardLabelArray;
     private JLabel minerPosLabel;
     private JLabel minerDirectionLabel;
