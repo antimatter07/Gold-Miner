@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.event.*;
-import java.awt.*;
 
 public class Controller implements ActionListener {
 
@@ -8,7 +7,7 @@ public class Controller implements ActionListener {
     private GUI gui;
     private BoardPanel boardPanel;
 
-    private OPBFS bfs;
+    private BFS bfs;
     private boolean inBoard = false;
     private boolean findingPath = false;
     private Timer timer;
@@ -50,6 +49,7 @@ public class Controller implements ActionListener {
             }
         }
         else { // user is seeing the board
+
             if (!findingPath) { //user has not yet prompted Miner to find path
                 if (e.getActionCommand().equals("Random")){
                     isRandom = true;
@@ -64,25 +64,35 @@ public class Controller implements ActionListener {
                     isSlow = false;
                 }
                 else if (e.getActionCommand().equals("FIND GOLD")){
-                    boardPanel.activateGo();
                     findingPath = true;
-                    solutionNode = getSolution();
+                    boardPanel.activateGo();
+                    boardPanel.removeActionListeners(this);
+                    // reset Miner pos, timer, and counters
+                    solutionCount = 0;
+                    board.getMiner().resetMiner();
+                    board.resetUnits(); // reset isVisited flags
+                    boardPanel.resetCounts();
+                    boardPanel.repaint();
                     createTimer();
                     timer.start();
+                    solutionNode = getSolution();
+                    if (solutionNode != null) { // if goal is found, get path
+                        solution = solutionNode.getActions();
+                        solutionLength = solution.length();
+                        boardPanel.updateScanCount(bfs.getScanCount());
+                    }
                 }
                 boardPanel.switchAI(isRandom);
                 boardPanel.switchSpeed(isSlow);
             }
             else { // Miner is currently finding path
-                if (solutionNode != null) {// Miner found path using chosen AI level
+                if (solutionNode != null) {// Miner found path
                     updateBoard();
                     boardPanel.repaint();
                 }
                 else { // Miner has NOT found a path
                     boardPanel.displayError();
-                    boardPanel.resetGo();
-                    findingPath = false;
-                    timer.stop();
+                    stopSearch();
                 }
             }
         }
@@ -102,6 +112,12 @@ public class Controller implements ActionListener {
         return false;
     }
 
+    private void stopSearch() {
+        findingPath = false;
+        boardPanel.resetGo(); // reset GO button to allow user to try another AI level
+        boardPanel.setActionListeners(this); // re-activate buttons
+        timer.stop();
+    }
     private void updateBoard() {
         char currentMove = solution.charAt(solutionCount);
         boardPanel.updateCosts(currentMove);
@@ -113,9 +129,7 @@ public class Controller implements ActionListener {
         solutionCount++;
         if (solutionCount == solutionLength) {
             boardPanel.updateCosts('G'); //Goal is Found
-            boardPanel.resetGo(); // allow user to try another AI level
-            findingPath = false;
-            timer.stop();
+            stopSearch();
         }
     }
 
@@ -128,21 +142,22 @@ public class Controller implements ActionListener {
     private Node getSolution () {
         if (isRandom)
             return tryRandom();
-        return null;
+        else return trySmart();
     }
 
     // checks if BFS can successfully find a path
     private Node tryRandom () {
-        try {
-            bfs = new OPBFS(board); // perform BFS
-            solutionNode = bfs.BFS();
-            solution = solutionNode.getActions();
-            solutionLength = solution.length();
-            return solutionNode;
-
+        try { // to perform BFS
+            bfs = new BFS(board);
+            return bfs.BFS();
         } catch (Exception e) {
             boardPanel.displayError();
+            stopSearch();
             return null;
         }
+    }
+
+    private Node trySmart() {
+        return null; // insert heuristic search here
     }
 }

@@ -6,6 +6,7 @@ public class Miner {
 
   //front is a hashmap key referencing the hours in the clock divisible by 3
   private int currentFront;
+  private static int startingFront = 0;
 
   //Miner Coordinates
   private int row;
@@ -13,19 +14,7 @@ public class Miner {
 
   private final char SYMBOL = 'M';
 
-  public Miner(){
-     
-     //using clock hands for clarity
-    Fronts = new HashMap<Integer, DirectionType>();
-    Fronts.put(12, DirectionType.NORTH);
-    Fronts.put(3, DirectionType.EAST);
-    Fronts.put(6, DirectionType.SOUTH);
-    Fronts.put(9, DirectionType.WEST);
-    resetMiner();
-  }
-  //NEW
-  public Miner(int row, int col, int front) {
-    //NEW
+  public Miner(int row, int col, int front) { // for Node
     Fronts = new HashMap<Integer, DirectionType>();
     Fronts.put(12, DirectionType.NORTH);
     Fronts.put(3, DirectionType.EAST);
@@ -34,14 +23,22 @@ public class Miner {
 
     this.row = row;
     this.col = col;
-    this.currentFront = front;
 
+    if (front == 0) { // if front is 0, initial front is not yet initialized
+      startingFront = randomizeFront();
+      currentFront = startingFront;
+    }
+    else this.currentFront = front;
+  }
+
+  private int randomizeFront() {
+    return (int) (Math.random() * 4 + 1) * 3;
   }
 
   public void resetMiner () {
     row = 0;
     col = 0;
-    currentFront = 12; //front is randomized but for now it can face up
+    currentFront = startingFront; //front is randomized but for now it can face up
   }
   
   public char getSymbol() { return this.SYMBOL; }
@@ -94,7 +91,6 @@ public class Miner {
 
           }
         }
-        
       break;
 
       case WEST:

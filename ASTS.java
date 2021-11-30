@@ -1,40 +1,11 @@
 import java.util.*;
 
 
-public class TrySmartSearch {
+public class ASTS {
   //smart level of rationality
 
   //A* search: https://www.peachpit.com/articles/article.aspx?p=101142&seqNum=2
-
-  public static void main(String[] args) {
-    Scanner scan = new Scanner(System.in);
-    int input;
-    
-    
-      
-        do{
-          System.out.print("Input Board Size: ");
-          input = scan.nextInt();
-
-          if(input < 8 || input > 64){
-            System.out.println("Input Invalid");
-          }
-
-        }while(input < 8 || input > 64);
-
-        Board board = new Board(input);
-        AStarNode solution;
-        solution = AStarSearch(board);
-
-        System.out.println("R: ROTATE, M: MOVE FORWARD. MINER INITIALLY FACING NORTH.");
-        System.out.println("ACTIONS TO GET TO THE GOLD: " + solution.getActions());
-        board.displayBoard();
-
-
-    scan.close();
-
-  }
-  public static AStarNode AStarSearch(Board board) {
+  public AStarNode AStarSearch(Board board) {
 
   
     //list of successor nodes after expanding
@@ -57,10 +28,6 @@ public class TrySmartSearch {
 
         //take latest unexplored node and expand
         node = fringe.remove();
-        
-        
-      
-        System.out.println("Have we reached goal:  " + node.isGoal());
 
         if(node.isGoal())
             return node;
@@ -98,7 +65,7 @@ public class TrySmartSearch {
 
   }
 
-  public static ArrayList<AStarNode> expand(AStarNode node, Board board) {
+  public ArrayList<AStarNode> expand(AStarNode node, Board board) {
     ArrayList<AStarNode> successors = new ArrayList<AStarNode>(4);
     int gCost;
   
@@ -130,9 +97,7 @@ public class TrySmartSearch {
 
       //if miner can move and scanned is not pit, move forward
       if(successors.get(i).getMiner().canMoveForward(board) && 
-      (successors.get(i).getMiner().scan(board) == UnitType.GOLD|| 
-      successors.get(i).getMiner().scan(board) == UnitType.BEACON || 
-      successors.get(i).getMiner().scan(board) == UnitType.EMPTY)) {
+      successors.get(i).getMiner().scan(board) != UnitType.PIT) {
 
         successors.get(i).setParent(node);
 

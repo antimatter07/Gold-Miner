@@ -33,6 +33,14 @@ public class BoardPanel extends JPanel {
         goButton.addActionListener(listener);
     }
 
+    public void removeActionListeners(ActionListener listener){
+        randomButton.removeActionListener(listener);
+        smartButton.removeActionListener(listener);
+        slowButton.removeActionListener(listener);
+        fastButton.removeActionListener(listener);
+        goButton.removeActionListener(listener);
+    }
+
     // creates the squares of the board
     private void drawBoard() {
         boardGrid = new JPanel();
@@ -157,7 +165,8 @@ public class BoardPanel extends JPanel {
 
     // formats the text GUI
     private void formatText(JLabel msg) {
-        msg.setFont (new Font("Monospaced", Font.BOLD, 22));
+        msg.setFont (new Font("Monospaced", Font.BOLD, 20));
+        msg.setForeground(Color.BLACK);
         msg.setBorder(javax.swing.BorderFactory.createEmptyBorder());
     }
 
@@ -220,6 +229,7 @@ public class BoardPanel extends JPanel {
 
     // resets all the counts to 0
     public void resetCounts() {
+        scanCount = 0;
         moveCount = 0;
         rotateCount = 0;
         pathCost = 0;
@@ -231,11 +241,15 @@ public class BoardPanel extends JPanel {
         moveLabel.setForeground(new Color(130, 0,0));
     }
 
+    public void updateScanCount (int count) {
+        scanCount = count;
+    }
+
     // updates the information on the dashboard
     private void updateInfoPanel () {
         formatText(moveLabel); //in case error was previously displayed
         moveLabel.setText(" Miner " + currentMove);
-        scanCountLabel.setText(" Miner scanned "+ 0/*scanCount*/ + " times.");
+        scanCountLabel.setText(" Miner scanned "+ scanCount + " times.");
         minerPosLabel.setText(" Miner is at [" + board.getMinerRow() + "," + board.getMinerCol() + "]");
         minerDirectionLabel.setText(" Miner is facing " + miner.getDirectionFront().toString());
         moveCountLabel.setText(" Move Count: " + moveCount);

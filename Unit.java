@@ -37,8 +37,9 @@ public class Unit{
     isVisited = true;
   }
 
-
   public boolean isVisited() {
     return isVisited;
   }
+
+  public void removeVisited() {isVisited = false;}
 }

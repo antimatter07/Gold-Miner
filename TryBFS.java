@@ -221,7 +221,7 @@ public class TryBFS {
         fringe = new Queue(100000);
         //root is the initial pos of Miner
         root = new Node(board.getMiningArea()[0][0]);
-        root.setMiner(new Miner());
+        root.setMiner(board.getMiner());
 
         fringe.enqueue(root);
     }

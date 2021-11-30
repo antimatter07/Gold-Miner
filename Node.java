@@ -58,23 +58,13 @@ public class Node {
 
     public void setSquare(Unit s) {
 
-        /*
         switch(s.getUnitType()){
           case PIT: state = new Pit(s.getCoordinates(), 'P', UnitType.PIT); break;
           case GOLD:  state = new Gold(s.getCoordinates(), 'G', UnitType.GOLD); break;
           case BEACON: state = new Beacon(s.getCoordinates(), 'B', UnitType.BEACON);
           Default: state = new EmptySquare(s.getCoordinates(), ' ', UnitType.EMPTY);
         }
-        */
-
-        if(s instanceof Pit) 
-            state = new Pit(s.getCoordinates(), 'P', UnitType.PIT);
-        else if (s instanceof Gold) 
-            state = new Gold(s.getCoordinates(), 'G', UnitType.GOLD);
-        else if (s instanceof Beacon)
-            state = new Beacon(s.getCoordinates(), 'B', UnitType.BEACON);
-        else     
-            state = new EmptySquare(s.getCoordinates(), ' ', UnitType.EMPTY);
+     
     }
 
     public void setParent(Node parent) {
@@ -91,15 +81,7 @@ public class Node {
 
 
     public boolean isGoal() {
-        /*
-        if(state.getUnitType == UnitType.GOLD)
-          return true;
-        return false;
-        */
-        if(state instanceof Gold) {
-            return true;
-        }
-        return false;
+        return state.getUnitType().equals(UnitType.GOLD);
     }
 
 

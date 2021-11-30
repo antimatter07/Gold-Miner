@@ -2,13 +2,14 @@ UPDATE:
 - slow (250 ms) and fast (1500 ms) Speed for Miner
 - user can now choose AI level and Miner Speed during the Board display
 - BFS can be activated from GUI (only displays path AFTER it is discovered,    not DURING)
+- implement scanCount into GUI
+- randomized Front of Miner
 
 
 TO-DO: //for GUI
 - implement Smart Search into GUI
-- implement scanCount into GUI
 - reset Miner to be able to use multiple AI levels with a single board state
-- tried to catch OutOfMemory error but the program crashes before displaying    error in GUI (maybe it's not poosible lel)
+- tried to catch OutOfMemory error but the program crashes before displaying    error in GUI (maybe it's not possible lel)
 
 FROM MCO1:
 AGENT RATIONALITY

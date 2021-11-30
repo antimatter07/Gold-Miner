@@ -1,6 +1,3 @@
-//modified to use api? and some optimization attempts
-//pacheck na lang if tama :>
-
  /* Some notes from the slides that can help with coding the search algo :
 
         given a state s, ACTIONS(s) returns a finite set of actions taht can be executed in s
@@ -23,8 +20,7 @@ import java.util.*;
 
 
 //random level of rationality
-// hmm ill try to make it so miner moves per node traversal, since there's scan count..
-public class OPBFS {
+public class BFS {
 
     private static Board board;
     private static int scanCount = 0;
@@ -35,17 +31,18 @@ public class OPBFS {
     private Node root;
     private Node node;
 
-    public OPBFS(Board board) {
+    public BFS(Board board) {
         this.board = board;
 
         successors = new ArrayList<Node>();
         fringe = new LinkedList<>();
         
-        //root is the initial pos of Miner
+        //root is the in  itial pos of Miner
         root = new Node(board.getMiningArea()[0][0]);
-        root.setMiner(new Miner());
+        root.setMiner(board.getMiner());
 
         fringe.add(root);
+        scanCount = 0;
     }
 
     //returns solution Node with path to the Gold
