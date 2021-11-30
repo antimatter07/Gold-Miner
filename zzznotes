@@ -4,11 +4,12 @@ UPDATE:
 - BFS can be activated from GUI (only displays path AFTER it is discovered,    not DURING)
 - implement scanCount into GUI
 - randomized Front of Miner
-
-
-TO-DO: //for GUI
 - implement Smart Search into GUI
-- reset Miner to be able to use multiple AI levels with a single board state
+- able to reset Miner to be able to use multiple AI levels with a single board state
+- GUI FULLY WORKS NA YEE
+
+
+TO-DO: 
 - tried to catch OutOfMemory error but the program crashes before displaying    error in GUI (maybe it's not possible lel)
 
 FROM MCO1:

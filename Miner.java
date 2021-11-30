@@ -38,7 +38,7 @@ public class Miner {
   public void resetMiner () {
     row = 0;
     col = 0;
-    currentFront = startingFront; //front is randomized but for now it can face up
+    currentFront = startingFront;
   }
   
   public char getSymbol() { return this.SYMBOL; }
@@ -139,9 +139,6 @@ public class Miner {
         if(col - 1 >= 0) col--;
       break;
     }
-
-   // System.out.println("Miner is now at coordinate [" + row + "] [" + col + "]");
-
   }
 
 
@@ -168,7 +165,5 @@ public class Miner {
       if(currentFront == 12) 
           currentFront = 3;
       else currentFront += 3;
-
-   // System.out.println("Miner is now facing " + Fronts.get(currentFront));
   }
 }

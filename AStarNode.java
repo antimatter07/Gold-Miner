@@ -91,6 +91,10 @@ public class AStarNode implements Comparable<AStarNode> {
       this.parent = parent;
   }
 
+  public void incrementGCost() {
+    gCost++;
+  }
+
   public void addAction(String action) {
       actions += action;
   }

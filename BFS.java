@@ -22,12 +22,12 @@ import java.util.*;
 //random level of rationality
 public class BFS {
 
-    private static Board board;
+    private Board board;
     private static int scanCount = 0;
 
     //list of successor nodes after expanding
     private ArrayList<Node> successors;
-    private Queue<Node> fringe; //fringe is the frontier of unexplored nodes //fringe is the frontier of unexplored nodes
+    private Queue<Node> fringe; //fringe is the frontier of unexplored nodes
     private Node root;
     private Node node;
 
@@ -37,7 +37,7 @@ public class BFS {
         successors = new ArrayList<Node>();
         fringe = new LinkedList<>();
         
-        //root is the in  itial pos of Miner
+        //root is the in  initial pos of Miner
         root = new Node(board.getMiningArea()[0][0]);
         root.setMiner(board.getMiner());
 
@@ -47,7 +47,7 @@ public class BFS {
 
     //returns solution Node with path to the Gold
     public Node BFS() {
-
+      
         //while there are nodes to explore and goal node is not reached, look for solution
         while (fringe.peek() != null) {
 
@@ -57,11 +57,11 @@ public class BFS {
             if (node.isGoal())
                 return node;
 
+
             successors = expand(node, board);
 
 
-            //for every successor generated that has not been visited, add to list of unexplored
-            //nodes
+            //for every successor generated that has not been visited, add to list of unexplored nodes
             for (int i = 0; i < successors.size() && successors.get(i) != null; i++) {
 
                 successors.get(i).getMiner().getCol();
@@ -88,6 +88,11 @@ public class BFS {
     public static ArrayList<Node> expand(Node node, Board board) {
         ArrayList<Node> successors = new ArrayList<Node>(4);
 
+      //flag for detecting if miner has moved while generating states
+      //if this remains false, miner is stuck in infinite rotating loop
+      boolean hasMoved = false;
+
+
         //for every valid action, generate new states as a result of doing that action
         for (int i = 0; i < 4; i++) {
 
@@ -108,6 +113,9 @@ public class BFS {
             //if miner can move and scanned is not pit, move forward
             if (successors.get(i).getMiner().canMoveForward(board) &&
                 successors.get(i).getMiner().scan(board) != UnitType.PIT) {
+                  
+                  //flag for detecting if miner moved
+                  hasMoved = true;
 
                   scanCount++;
                   successors.get(i).setParent(node);
@@ -120,6 +128,33 @@ public class BFS {
             }
 
 
+        }
+
+        //if miner has not changed position for any node generated
+        //move forward on any random node to prevent being stuck rotating forever
+        if(hasMoved == false) {
+            Random rand = new Random();
+            int index;
+
+            
+
+            while(hasMoved == false) {
+
+              index = rand.nextInt(4);
+
+              if(successors.get(index).getMiner() != null 
+              && successors.get(index).getMiner().canMoveForward(board)) {
+
+                  successors.get(index).getMiner().move(board);
+                  //add M to track actions done to get to goal node
+                  successors.get(index).addAction("M");
+                  successors.get(index).setParent(node);
+                  successors.get(index).setSquare(board.getMiningArea()[successors.get(index).getMiner().getRow()][successors.get(index).getMiner().getCol()]);
+                  hasMoved = true;
+                
+              }
+              
+            }
         }
 
         return successors;

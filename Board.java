@@ -12,7 +12,7 @@ public class Board{
         this.N = N;
         boardArray = new Unit[N][N];
         goldCoord = new int[2];
-        miner = new Miner(0,0,0);
+        miner = new Miner(0, 0, 0);
         pitCount = computePit();
         beaconCount = computeBeacon();
         generateBoard();
@@ -189,6 +189,7 @@ public class Board{
         }
     }
 
+    //Remove this?
     public void displayBoard(){
 
         for(int i =0; i < N; i++){

@@ -5,11 +5,9 @@ public class Node {
     //Unit miner is
     private Unit state;
     //a string of actions that will lead to gold "M" for move, "R" for rotate
-    //cant figure out how to backtrack the moves yet so for now string muna siya with the actions
     private String actions = "";
     private Miner miner;
     public boolean isVisited = false;
-    
 
     public Node(){
         
@@ -32,7 +30,6 @@ public class Node {
     public void markVisited() {
         isVisited = true;
     }
-
 
 
     public void setMiner(Miner m) {
@@ -58,13 +55,23 @@ public class Node {
 
     public void setSquare(Unit s) {
 
+        /*
         switch(s.getUnitType()){
           case PIT: state = new Pit(s.getCoordinates(), 'P', UnitType.PIT); break;
           case GOLD:  state = new Gold(s.getCoordinates(), 'G', UnitType.GOLD); break;
           case BEACON: state = new Beacon(s.getCoordinates(), 'B', UnitType.BEACON);
           Default: state = new EmptySquare(s.getCoordinates(), ' ', UnitType.EMPTY);
         }
-     
+        */
+
+        if(s instanceof Pit)
+            state = new Pit(s.getCoordinates(), 'P', UnitType.PIT);
+        else if (s instanceof Gold)
+            state = new Gold(s.getCoordinates(), 'G', UnitType.GOLD);
+        else if (s instanceof Beacon)
+            state = new Beacon(s.getCoordinates(), 'B', UnitType.BEACON);
+        else
+            state = new EmptySquare(s.getCoordinates(), ' ', UnitType.EMPTY);
     }
 
     public void setParent(Node parent) {
@@ -83,8 +90,5 @@ public class Node {
     public boolean isGoal() {
         return state.getUnitType().equals(UnitType.GOLD);
     }
-
-
-     
 
 }

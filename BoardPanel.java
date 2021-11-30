@@ -196,6 +196,7 @@ public class BoardPanel extends JPanel {
 
     // make start button green
     public void activateGo () {
+        moveLabel.setText("MINERS STARTS!");
         goButton.setBackground(Color.GREEN);
         goButton.setText("SEARCHING...");
     }

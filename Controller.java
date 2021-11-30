@@ -8,6 +8,7 @@ public class Controller implements ActionListener {
     private BoardPanel boardPanel;
 
     private BFS bfs;
+    private ASTS asts;
     private boolean inBoard = false;
     private boolean findingPath = false;
     private Timer timer;
@@ -18,7 +19,6 @@ public class Controller implements ActionListener {
     private boolean isRandom = true;
     private boolean isSlow = true;
 
-    private Node solutionNode;
     private String solution; // String of all moves made by Miner
     private int solutionLength; // total number of actions done by Miner
     private int solutionCount = 0; // determines current action displayed on the GUI
@@ -75,18 +75,17 @@ public class Controller implements ActionListener {
                     boardPanel.repaint();
                     createTimer();
                     timer.start();
-                    solutionNode = getSolution();
-                    if (solutionNode != null) { // if goal is found, get path
-                        solution = solutionNode.getActions();
+                    solution = getSolution(); // solution == String path
+                    if (solution != null) { // if goal is found, get path
                         solutionLength = solution.length();
-                        boardPanel.updateScanCount(bfs.getScanCount());
+                        boardPanel.updateScanCount(getScanCount());
                     }
                 }
                 boardPanel.switchAI(isRandom);
                 boardPanel.switchSpeed(isSlow);
             }
             else { // Miner is currently finding path
-                if (solutionNode != null) {// Miner found path
+                if (solution != null) {// Miner found path
                     updateBoard();
                     boardPanel.repaint();
                 }
@@ -118,6 +117,13 @@ public class Controller implements ActionListener {
         boardPanel.setActionListeners(this); // re-activate buttons
         timer.stop();
     }
+
+    private int getScanCount() {
+        if (isRandom)
+            return bfs.getScanCount();
+        else return asts.getScanCount();
+    }
+
     private void updateBoard() {
         char currentMove = solution.charAt(solutionCount);
         boardPanel.updateCosts(currentMove);
@@ -139,17 +145,17 @@ public class Controller implements ActionListener {
         else timer = new Timer(fastDelay, this);
     }
 
-    private Node getSolution () {
+    private String getSolution () {
         if (isRandom)
             return tryRandom();
         else return trySmart();
     }
 
     // checks if BFS can successfully find a path
-    private Node tryRandom () {
+    private String tryRandom () {
         try { // to perform BFS
             bfs = new BFS(board);
-            return bfs.BFS();
+            return bfs.BFS().getActions();
         } catch (Exception e) {
             boardPanel.displayError();
             stopSearch();
@@ -157,7 +163,16 @@ public class Controller implements ActionListener {
         }
     }
 
-    private Node trySmart() {
-        return null; // insert heuristic search here
+    // checks if A* can successfully find a path
+    private String trySmart() {
+        try { // Try to perform A*
+            asts = new ASTS();
+            return asts.AStarSearch(board).getActions();
+        }
+        catch (Exception e) {
+            boardPanel.displayError();
+            stopSearch();
+            return null;
+        }
     }
 }
