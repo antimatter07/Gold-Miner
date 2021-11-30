@@ -171,7 +171,6 @@ public class Controller implements ActionListener {
         }
         catch (Exception e) {
             boardPanel.displayError();
-            stopSearch();
             return null;
         }
     }

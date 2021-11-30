@@ -12,6 +12,6 @@ UPDATE:
 TO-DO: 
 - tried to catch OutOfMemory error but the program crashes before displaying    error in GUI (maybe it's not possible lel)
 
-FROM MCO1:
+FROM MCO1:pop
 AGENT RATIONALITY
 The locations of the pits and beacons are variables. The paths cannot be explored ahead before the miner moves. The most intelligent agent will be determined by comparing the average number of squares that were traversed to reach the golden square. 

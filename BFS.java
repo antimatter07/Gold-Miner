@@ -74,7 +74,7 @@ public class BFS {
 
             }
 
-            //set as visited so that miner will not redundantly expand nodes already explored
+            //set as current square as visited so that miner will not redundantly expand nodes already explored
             board.getMiningArea()[node.getMiner().getRow()][node.getMiner().getCol()].setVisited();
 
             successors.clear();
@@ -85,6 +85,7 @@ public class BFS {
 
     }
 
+    // expands the current node
     public static ArrayList<Node> expand(Node node, Board board) {
         ArrayList<Node> successors = new ArrayList<Node>(4);
 
@@ -104,13 +105,14 @@ public class BFS {
             for (int j = 0; j < i; j++) {
 
                 //add R to track actions done to get to goal node
-
                 successors.get(i).addAction("R");
                 successors.get(i).setParent(node);
                 successors.get(i).getMiner().rotate();
 
             }
-            //if miner can move and scanned is not pit, move forward
+          
+          
+            // if miner can move and scanned is not pit, move forward
             if (successors.get(i).getMiner().canMoveForward(board) &&
                 successors.get(i).getMiner().scan(board) != UnitType.PIT) {
                   
@@ -135,8 +137,6 @@ public class BFS {
         if(hasMoved == false) {
             Random rand = new Random();
             int index;
-
-            
 
             while(hasMoved == false) {
 
