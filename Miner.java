@@ -21,11 +21,7 @@ public class Miner {
     Fronts.put(3, DirectionType.EAST);
     Fronts.put(6, DirectionType.SOUTH);
     Fronts.put(9, DirectionType.WEST);
-
-    row = 0;
-    col = 0;
-    //front is randomized but for now it can face up
-    currentFront = 12;
+    resetMiner();
   }
   //NEW
   public Miner(int row, int col, int front) {
@@ -40,6 +36,12 @@ public class Miner {
     this.col = col;
     this.currentFront = front;
 
+  }
+
+  public void resetMiner () {
+    row = 0;
+    col = 0;
+    currentFront = 12; //front is randomized but for now it can face up
   }
   
   public char getSymbol() { return this.SYMBOL; }
@@ -142,7 +144,7 @@ public class Miner {
       break;
     }
 
-    System.out.println("Miner is now at coordinate [" + row + "] [" + col + "]");
+   // System.out.println("Miner is now at coordinate [" + row + "] [" + col + "]");
 
   }
 
@@ -171,7 +173,6 @@ public class Miner {
           currentFront = 3;
       else currentFront += 3;
 
-    System.out.println("Miner is now facing " + Fronts.get(currentFront));
+   // System.out.println("Miner is now facing " + Fronts.get(currentFront));
   }
-
 }

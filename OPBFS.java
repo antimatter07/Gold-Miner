@@ -19,9 +19,6 @@
      */
 
 import java.util.Queue;
-import javax.swing.*;
-import javax.swing.Timer;
-import java.awt.event.ActionEvent;
 import java.util.*;
 
 
@@ -29,16 +26,14 @@ import java.util.*;
 // hmm ill try to make it so miner moves per node traversal, since there's scan count..
 public class OPBFS {
 
-    //list of successor nodes after expanding
     private static Board board;
-    private static int pathCost = 0;
+    private static int scanCount = 0;
 
     //list of successor nodes after expanding
     private ArrayList<Node> successors;
     private Queue<Node> fringe; //fringe is the frontier of unexplored nodes //fringe is the frontier of unexplored nodes
     private Node root;
     private Node node;
-    private Node solution;
 
     public OPBFS(Board board) {
         this.board = board;
@@ -54,7 +49,7 @@ public class OPBFS {
     }
 
     //returns solution Node with path to the Gold
-    public Node BreadthFirstSearch() {
+    public Node BFS() {
 
         //while there are nodes to explore and goal node is not reached, look for solution
         while (fringe.peek() != null) {
@@ -117,6 +112,7 @@ public class OPBFS {
             if (successors.get(i).getMiner().canMoveForward(board) &&
                 successors.get(i).getMiner().scan(board) != UnitType.PIT) {
 
+                  scanCount++;
                   successors.get(i).setParent(node);
 
                   //add M to track actions done to get to goal node
@@ -137,5 +133,13 @@ public class OPBFS {
         dupNode.setMiner(origNode.getMiner());
         dupNode.setActions(origNode.getActions());
         dupNode.setParent(origNode.getParent());
+    }
+
+    public void resetScanCount() {
+        scanCount = 0;
+    }
+
+    public int getScanCount () {
+        return scanCount;
     }
 }

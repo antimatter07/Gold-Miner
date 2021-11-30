@@ -1,11 +1,15 @@
-AHHH GUI is almost working na (Miner moving per 1.5 secs i think?)
-
-continue lang sa GUI medyo may idea na ako for heuristic hehe
-also for BFS, i think its ok if we just show the final solution where the miner found the gold
-ang hirap if we show all the possible solutions it considers 
-
-Just need to implement how it will show the BFS
-T-T
+UPDATE:
+- slow (250 ms) and fast (1500 ms) Speed for Miner
+- user can now choose AI level and Miner Speed during the Board display
+- BFS can be activated from GUI (only displays path AFTER it is discovered,    not DURING)
 
 
-okiii. gl
+TO-DO: //for GUI
+- implement Smart Search into GUI
+- implement scanCount into GUI
+- reset Miner to be able to use multiple AI levels with a single board state
+- tried to catch OutOfMemory error but the program crashes before displaying    error in GUI (maybe it's not poosible lel)
+
+FROM MCO1:
+AGENT RATIONALITY
+The locations of the pits and beacons are variables. The paths cannot be explored ahead before the miner moves. The most intelligent agent will be determined by comparing the average number of squares that were traversed to reach the golden square. 

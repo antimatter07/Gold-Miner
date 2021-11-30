@@ -1,6 +1,7 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -18,10 +19,18 @@ public class BoardPanel extends JPanel {
         squareSize = HEIGHT/N;
         minerIcons = new Image[4]; // N E S W
         boardLabelArray = new JLabel[N][N];
-        currentMove = "STARTS";
+        currentMove = "is THINKING...";
         makeMinerIcons();
         drawBoard();
-        makeInfoPanel();
+        makeDashPanel();
+    }
+
+    public void setActionListeners(ActionListener listener){
+        randomButton.addActionListener(listener);
+        smartButton.addActionListener(listener);
+        slowButton.addActionListener(listener);
+        fastButton.addActionListener(listener);
+        goButton.addActionListener(listener);
     }
 
     // creates the squares of the board
@@ -68,14 +77,16 @@ public class BoardPanel extends JPanel {
         this.add(boardGrid);
     }
 
-    private void makeInfoPanel () {
-        infoPanel = new JPanel();
-        infoPanel.setLayout(new GridLayout());
-        infoPanel.setPreferredSize(new Dimension(WIDTH-HEIGHT, HEIGHT));
-        infoPanel.setBackground(infoColor);
+    // creates the dashboard
+    private void makeDashPanel () {
+        dashPanel = new JPanel();
+        dashPanel.setLayout(new GridLayout(2,1));
+        dashPanel.setPreferredSize(new Dimension(WIDTH-HEIGHT, HEIGHT));
+        dashPanel.setBackground(infoColor);
 
+        // infoPanel : displays counters and current position of miner
         JPanel labels = new JPanel();
-        labels.setLayout(new GridLayout(6,1));
+        labels.setLayout(new GridLayout(7,1));
         labels.setBackground(infoColor);
         minerPosLabel = new JLabel();
         formatText(minerPosLabel);
@@ -83,6 +94,8 @@ public class BoardPanel extends JPanel {
         formatText(minerDirectionLabel);
         moveLabel = new JLabel();
         formatText(moveLabel);
+        scanCountLabel = new JLabel();
+        formatText(scanCountLabel);
         moveCountLabel = new JLabel();
         formatText(moveCountLabel);
         rotateCountLabel = new JLabel();
@@ -91,41 +104,140 @@ public class BoardPanel extends JPanel {
         formatText(pathCostLabel);
         updateInfoPanel();
 
+        labels.add(moveLabel);
         labels.add(minerPosLabel);
         labels.add(minerDirectionLabel);
-        labels.add(moveLabel);
+        labels.add(scanCountLabel);
         labels.add(moveCountLabel);
         labels.add(rotateCountLabel);
         labels.add(pathCostLabel);
-        infoPanel.add(labels, BorderLayout.NORTH);
 
-        // add history of moves
-        this.add(infoPanel);
+        // optionPanel : creates GUI that allows user to choose level of rational behavior
+        // and speed of miner
+        JPanel optionPanel = new JPanel();
+        optionPanel.setLayout(new GridLayout(5,1));
+        optionPanel.setPreferredSize(new Dimension(WIDTH-HEIGHT, HEIGHT/2));
+        optionPanel.setBackground(optionColor);
+
+        JLabel aiLabel = new JLabel("Select Miner AI Level:");
+        formatText(aiLabel);
+        aiLabel.setHorizontalAlignment(JLabel.CENTER);
+        JPanel aiPanel = new JPanel();
+        aiPanel.setBackground(optionColor);
+        randomButton = new JButton("Random");
+        aiPanel.add(randomButton);
+        smartButton = new JButton("Smart");
+        aiPanel.add(smartButton);
+
+        JLabel speedLabel = new JLabel("Select Miner Speed:");
+        speedLabel.setHorizontalAlignment(JLabel.CENTER);
+        formatText(speedLabel);
+        JPanel speedPanel = new JPanel();
+        speedPanel.setBackground(optionColor);
+        slowButton = new JButton("Slow");
+        speedPanel.add(slowButton);
+        fastButton = new JButton("Fast");
+        speedPanel.add(fastButton);
+        goButton = new JButton();
+        goButton.setFont(new Font("Arial", Font.BOLD, 30));
+
+        switchAI(true); //default AI is Random level
+        switchSpeed(true); //default speed is Slow
+        resetGo(); //reset Go button
+        optionPanel.add(aiLabel);
+        optionPanel.add(aiPanel);
+        optionPanel.add(speedLabel);
+        optionPanel.add(speedPanel);
+        optionPanel.add(goButton);
+
+        dashPanel.add(optionPanel);
+        dashPanel.add(labels);
+        this.add(dashPanel);
     }
 
+    // formats the text GUI
     private void formatText(JLabel msg) {
         msg.setFont (new Font("Monospaced", Font.BOLD, 22));
         msg.setBorder(javax.swing.BorderFactory.createEmptyBorder());
     }
 
+    // switch the active AI button
+    public void switchAI (boolean isRandom) {
+        if (isRandom) {
+            randomButton.setBackground(Color.GREEN);
+            smartButton.setBackground(Color.GRAY);
+        }
+        else {
+            randomButton.setBackground(Color.GRAY);
+            smartButton.setBackground(Color.GREEN);
+        }
+    }
+
+    // switch the active speed button
+    public void switchSpeed (boolean isSlow) {
+        if (isSlow) {
+            slowButton.setBackground(Color.GREEN);
+            fastButton.setBackground(Color.GRAY);
+        }
+        else {
+            slowButton.setBackground(Color.GRAY);
+            fastButton.setBackground(Color.GREEN);
+        }
+    }
+
+    // make start button green
+    public void activateGo () {
+        goButton.setBackground(Color.GREEN);
+        goButton.setText("SEARCHING...");
+    }
+
+    // reset start button
+    public void resetGo () {
+        goButton.setBackground(Color.GRAY);
+        goButton.setText("FIND GOLD");
+    }
+
+    // updates the GUI to reflect the current move of the Miner, as well as the number
+    // of performed actions
     public void updateCosts (char move) {
-        if (move == 'M') {
-            currentMove = "MOVES";
-            moveCount++;
+        // get scanCount
+        switch (move){
+            case 'M':
+                currentMove = "MOVES";
+                moveCount++;
+                break;
+            case 'R':
+                currentMove = "ROTATES";
+                rotateCount++;
+                break;
+            case 'G':
+                currentMove = "FOUND GOAL";
+                break;
+
         }
-        else if (move == 'R') {
-            currentMove = "ROTATES";
-            rotateCount++;
-        }
-        else if (move == 'G')
-            currentMove = "FOUND GOAL";
         pathCost = moveCount + rotateCount;
     }
 
+    // resets all the counts to 0
+    public void resetCounts() {
+        moveCount = 0;
+        rotateCount = 0;
+        pathCost = 0;
+    }
+
+    public void displayError() {
+        moveLabel.setText(" Oops! Miner can't find GOLD...");
+        moveLabel.setFont(new Font("Monospaced", Font.BOLD, 18));
+        moveLabel.setForeground(new Color(130, 0,0));
+    }
+
+    // updates the information on the dashboard
     private void updateInfoPanel () {
+        formatText(moveLabel); //in case error was previously displayed
+        moveLabel.setText(" Miner " + currentMove);
+        scanCountLabel.setText(" Miner scanned "+ 0/*scanCount*/ + " times.");
         minerPosLabel.setText(" Miner is at [" + board.getMinerRow() + "," + board.getMinerCol() + "]");
         minerDirectionLabel.setText(" Miner is facing " + miner.getDirectionFront().toString());
-        moveLabel.setText(" Miner " + currentMove);
         moveCountLabel.setText(" Move Count: " + moveCount);
         rotateCountLabel.setText(" Rotate Count: " + rotateCount);
         pathCostLabel.setText(" Path Cost: " + pathCost);
@@ -139,6 +251,7 @@ public class BoardPanel extends JPanel {
         changeSize("images/miner_west.png", 3, squareSize, squareSize);
     }
 
+    // changes the size of the miner icons to fit into the squares
     private void changeSize(String imgName, int dir, int w, int h){
         Image img = loadImage(imgName);
         if (img != null)
@@ -146,6 +259,7 @@ public class BoardPanel extends JPanel {
         minerIcons[dir] = img;
     }
 
+    // adjusts the appearance of the GUI of the Miner to reflect its current state
     private void displayMiner () {
         int row = miner.getRow();
         int col = miner.getCol();
@@ -167,6 +281,7 @@ public class BoardPanel extends JPanel {
         }
     }
 
+    // checks if the image file exists
     private BufferedImage loadImage(String path) {
         try {
             return ImageIO.read(new File(path));
@@ -176,6 +291,7 @@ public class BoardPanel extends JPanel {
         }
     }
 
+    // updates the gui when repaint() is called
     @Override
     public void paint (Graphics g) {
         super.paint(g);
@@ -192,6 +308,7 @@ public class BoardPanel extends JPanel {
     private final int WIDTH;
     private final int HEIGHT;
 
+    private int scanCount = 0;
     private int moveCount = 0;
     private int rotateCount = 0;
     private int pathCost = 0;
@@ -202,9 +319,10 @@ public class BoardPanel extends JPanel {
     private Color beaconColor = new Color (78, 175,169);
     private Color goldColor = new Color(242, 195, 50);
     private Color infoColor = new Color(184, 223, 216);
+    private Color optionColor = new Color(170,170,170);
 
     private JPanel boardGrid;
-    private JPanel infoPanel;
+    private JPanel dashPanel;
 
     private JLabel currentLabel;
     private Image currentImage;
@@ -214,9 +332,14 @@ public class BoardPanel extends JPanel {
     private JLabel minerPosLabel;
     private JLabel minerDirectionLabel;
     private JLabel moveLabel;
+    private JLabel scanCountLabel;
     private JLabel moveCountLabel;
     private JLabel rotateCountLabel;
     private JLabel pathCostLabel;
-    
 
+    private JButton randomButton;
+    private JButton smartButton;
+    private JButton slowButton;
+    private JButton fastButton;
+    private JButton goButton;
 }
