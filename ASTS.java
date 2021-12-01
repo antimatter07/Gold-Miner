@@ -96,8 +96,6 @@ public class ASTS {
 
           //increment gCost everytime mienr rotates
           gCost++;
-            
-           
 
       }
 
