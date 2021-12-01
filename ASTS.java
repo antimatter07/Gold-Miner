@@ -6,7 +6,7 @@ public class ASTS {
 
   private static int scanCount = 0;
 
-  //A* search: https://www.peachpit.com/articles/article.aspx?p=101142&seqNum=2
+  //A* search
   public AStarNode AStarSearch(Board board) {
 
   
