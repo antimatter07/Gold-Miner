@@ -1,14 +1,6 @@
 import java.util.Queue;
 import java.util.*;
 
-/* NOTES:
-  each call of expand() can return at most 2 successors: MOVE and ROTATE
-  miner.scan() is not used, Miner will explore each square until GOLD is found
-   if BEACON is found, it will clear the fringe, and will directly go to GOLD
-  ^^ if BEACON is found, this is the only time MINER will use scan
-  solution is always found, but not always the most optimal
-*/
-
 
 //random level of rationality
 public class BFS {

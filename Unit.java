@@ -1,3 +1,5 @@
+
+//Unit represents a square in the grid
 public class Unit{
 
   protected char symbol;
@@ -5,7 +7,7 @@ public class Unit{
   protected UnitType type;
   protected boolean hasObject; //tells if the square has gold, pit or beacon
   
-  protected boolean isVisited;
+  protected boolean isVisited; // determines if the square has been visited by the miner
   
   //constructor can be like this maybe with the row and col position on the board
   public Unit(int[] coord, char symbol, UnitType type, boolean hasObject){
