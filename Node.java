@@ -8,6 +8,7 @@ public class Node {
     private String actions = "";
     private Miner miner;
     public boolean isVisited = false;
+    public boolean foundBeacon = false;
 
     public Node(){
         
@@ -44,7 +45,6 @@ public class Node {
         return miner;
     }
 
-
     public Unit getSquare() {
         return state;
     }
@@ -54,16 +54,6 @@ public class Node {
     }
 
     public void setSquare(Unit s) {
-
-        /*
-        switch(s.getUnitType()){
-          case PIT: state = new Pit(s.getCoordinates(), 'P', UnitType.PIT); break;
-          case GOLD:  state = new Gold(s.getCoordinates(), 'G', UnitType.GOLD); break;
-          case BEACON: state = new Beacon(s.getCoordinates(), 'B', UnitType.BEACON);
-          Default: state = new EmptySquare(s.getCoordinates(), ' ', UnitType.EMPTY);
-        }
-        */
-
         if(s instanceof Pit)
             state = new Pit(s.getCoordinates(), 'P', UnitType.PIT);
         else if (s instanceof Gold)
@@ -89,6 +79,14 @@ public class Node {
 
     public boolean isGoal() {
         return state.getUnitType().equals(UnitType.GOLD);
+    }
+
+    public boolean isBeaconFound () {
+        return foundBeacon;
+    }
+
+    public void setBeaconFound(boolean found) {
+        foundBeacon = found;
     }
 
 }

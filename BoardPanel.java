@@ -196,9 +196,12 @@ public class BoardPanel extends JPanel {
 
     // make start button green
     public void activateGo () {
-        moveLabel.setText("MINERS STARTS!");
+        currentMove = "STARTS!";
+        formatText(moveLabel);
         goButton.setBackground(Color.GREEN);
         goButton.setText("SEARCHING...");
+        resetCounts();
+        updateInfoPanel();
     }
 
     // reset start button
@@ -242,12 +245,18 @@ public class BoardPanel extends JPanel {
         moveLabel.setForeground(new Color(130, 0,0));
     }
 
+    public void displayGameOver() {
+        moveLabel.setText(" GAME OVER!");
+        moveLabel.setFont(new Font("Monospaced", Font.BOLD, 20));
+        moveLabel.setForeground(new Color(130, 0,0));
+    }
+
     public void updateScanCount (int count) {
         scanCount = count;
     }
 
     // updates the information on the dashboard
-    private void updateInfoPanel () {
+    public void updateInfoPanel () {
         formatText(moveLabel); //in case error was previously displayed
         moveLabel.setText(" Miner " + currentMove);
         scanCountLabel.setText(" Miner scanned "+ scanCount + " times.");
@@ -311,7 +320,6 @@ public class BoardPanel extends JPanel {
     public void paint (Graphics g) {
         super.paint(g);
         displayMiner();
-        updateInfoPanel();
         g.drawImage(currentImage, currentLabel.getX(), currentLabel.getY(), null);
     }
 

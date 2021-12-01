@@ -12,7 +12,7 @@ public class Controller implements ActionListener {
     private boolean inBoard = false;
     private boolean findingPath = false;
     private Timer timer;
-    private int fastDelay = 250;
+    private int fastDelay = 150;
     private int slowDelay = 1000;
 
     // default options
@@ -65,13 +65,12 @@ public class Controller implements ActionListener {
                 }
                 else if (e.getActionCommand().equals("FIND GOLD")){
                     findingPath = true;
-                    boardPanel.activateGo();
                     boardPanel.removeActionListeners(this);
                     // reset Miner pos, timer, and counters
                     solutionCount = 0;
                     board.getMiner().resetMiner();
                     board.resetUnits(); // reset isVisited flags
-                    boardPanel.resetCounts();
+                    boardPanel.activateGo();
                     boardPanel.repaint();
                     createTimer();
                     timer.start();
@@ -127,15 +126,26 @@ public class Controller implements ActionListener {
     private void updateBoard() {
         char currentMove = solution.charAt(solutionCount);
         boardPanel.updateCosts(currentMove);
+
         if (currentMove == 'R')
             board.getMiner().rotate();
         else if (currentMove == 'M')
             board.getMiner().move(board);
+        else if (currentMove == 'P') {
+            boardPanel.displayGameOver();
+            stopSearch();
+        }
         
         solutionCount++;
-        if (solutionCount == solutionLength) {
+        if (timer.isRunning() && solutionCount == solutionLength) {
             boardPanel.updateCosts('G'); //Goal is Found
+            boardPanel.updateInfoPanel();
             stopSearch();
+        }
+
+        if(timer.isRunning()) {
+            boardPanel.updateInfoPanel();
+            boardPanel.repaint();
         }
     }
 
@@ -157,6 +167,7 @@ public class Controller implements ActionListener {
             bfs = new BFS(board);
             return bfs.BFS().getActions();
         } catch (Exception e) {
+            System.err.println("ERROR: " + e);
             boardPanel.displayError();
             stopSearch();
             return null;
